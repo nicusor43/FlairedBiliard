@@ -66,3 +66,13 @@ std::vector<glm::vec2> Util::triangleRackPositions(unsigned rows, float r, float
 
     return positions;
 }
+
+float Util::distance(glm::vec2 a, glm::vec2 b)
+{
+    return sqrtf((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+float Util::rotationToPoint(glm::vec2 a, glm::vec2 b)
+{
+    return atan2f(b.y - a.y, b.x - a.x);
+}

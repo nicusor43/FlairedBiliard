@@ -30,10 +30,13 @@ public:
 
     static constexpr float RADIUS = 25.f;
 
+    glm::vec2 position = glm::vec2{0.f, 0.f};
+    glm::vec2 velocity = glm::vec2{0.f, 0.f};
+
+    void update(float dt);
     void render(glm::mat4 resize_matrix);
 private:
-    glm::mat4 transform = glm::mat4(1.f);
-    glm::vec2 position;
+    glm::mat4 transform = glm::mat4{1.f};
 
     GLuint vao_id, vbo_id, ebo_id, texture, program_id, my_matrix_location;
     void createVBO();

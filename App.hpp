@@ -26,6 +26,8 @@
 #include "Ball.hpp"
 #include "Util.hpp"
 
+#include <chrono>
+#include <thread>
 #include <vector>
 
 class App
@@ -36,9 +38,19 @@ public:
     static glm::mat4 resize_matrix;
 
 private:
+    static float delta_time;
+    static std::chrono::time_point<std::chrono::steady_clock> last_frame_time;
+
     static PoolTable *pool_table;
     static std::vector<Ball*> balls;
+    static bool ballHit;
+
     static void initWindow(int argc, char **argv);
-    static void render();
     static void cleanup();
+    static void handleInput(unsigned char key, int x, int y);
+
+    static void ballsInteraction();
+
+    static void update();
+    static void render();
 };

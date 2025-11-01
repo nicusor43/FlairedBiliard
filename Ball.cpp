@@ -57,6 +57,12 @@ void Ball::createVBO()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid *)(7 * sizeof(GLfloat)));
 }
 
+void Ball::update(float dt)
+{
+    this->position.x += this->velocity.x * dt;
+    this->position.y += this->velocity.y * dt;
+}
+
 void Ball::render(glm::mat4 resize_matrix)
 {
     glUseProgram(program_id);
