@@ -10,7 +10,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "SOIL.h"	
+#include "SOIL.h"
+
+#include "PoolTable.hpp"
 
 class App
 {
@@ -23,8 +25,9 @@ public:
 	static glm::mat4 resize_matrix;
 
 private:
+	static PoolTable* pool_table;
 	static void initWindow(int argc, char** argv);
-
 	static void render();
+	static void cleanup();
 };
 

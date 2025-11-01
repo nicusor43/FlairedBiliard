@@ -4,23 +4,45 @@ PoolTable::PoolTable()
 {
 	this->createVBO();
 	Util::loadTexture("table.png", this->texture);
+
+	program_id = LoadShaders("shader.vert", "shader.frag");
+
+	my_matrix_location = glGetUniformLocation(program_id, "myMatrix");
 }
 
+void PoolTable::render(glm::mat4 resize_matrix) {
+	glUseProgram(program_id);
 
+	glBindVertexArray(vao_id);
+
+	glUniformMatrix4fv(my_matrix_location, 1, GL_FALSE, &resize_matrix[0][0]);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glUniform1i(glGetUniformLocation(program_id, "myTexture"), 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
+}
 
 PoolTable::~PoolTable()
 {
-
+	glDeleteProgram(program_id);
+	glDeleteTextures(1, &texture);
+	glDeleteBuffers(1, &ebo_id);
+	glDeleteBuffers(1, &vbo_id);
+	glDeleteVertexArrays(1, &vao_id);
 }
 
 void PoolTable::createVBO()
 {
 	GLfloat vertices[] = {
 		//	Coordonate;					Culori;				Coordonate de texturare;
-		   0.0f,   0.0f, 0.0f, 1.0f,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// Stanga jos;
-		   1920.0f, 0.0f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,	1.0f, 0.0f, // Dreapta jos;
-		   1920.0f,1080.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.0f,	1.0f, 1.0f,	// Dreapta sus;
-		   0.0f, 1080.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,	0.0f, 1.0f  // Stanga sus;
+		   0.0f,   0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// Stanga jos;
+		   1920.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f, 0.0f,	1.0f, 0.0f, // Dreapta jos;
+		   1920.0f,1080.0f, 0.0f, 1.0f,   0.0f, 0.0f, 0.0f,	1.0f, 1.0f,	// Dreapta sus;
+		   0.0f, 1080.0f, 0.0f, 1.0f,   0.0f, 0.0f, 0.0f,	0.0f, 1.0f  // Stanga sus;
 	};
 
 
