@@ -13,9 +13,9 @@ void App::init(int argc, char** argv)
 {
 	resize_matrix = glm::ortho(0.0f, (float)WIN_WIDTH, 0.0f, (float)WIN_HEIGHT);
 
-	initWindow(argc, argv);
+    initWindow(argc, argv);
 
-	glewInit();
+    glewInit();
 
 	pool_table = new PoolTable();
 
@@ -29,16 +29,16 @@ void App::init(int argc, char** argv)
 
 void App::initWindow(int argc, char** argv)
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(WIN_WIDTH, WIN_HEIGHT);
-	glutInitWindowPosition(0, 0);				
-	glutCreateWindow("Biliard");
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(WIN_WIDTH, WIN_HEIGHT);
+    glutInitWindowPosition(0, 0);				
+    glutCreateWindow("Biliard");
 }
 
 void App::render()
 {
-	glClear(GL_COLOR_BUFFER_BIT);	
+    glClear(GL_COLOR_BUFFER_BIT);	
 
 	if (pool_table) {
 		pool_table->render(resize_matrix);

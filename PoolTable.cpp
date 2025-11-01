@@ -46,21 +46,21 @@ void PoolTable::createVBO()
 	};
 
 
-	GLuint indices[] = {
-	  0, 1, 2,
-	  0, 2, 3
-	};
+    GLuint indices[] = {
+      0, 1, 2,
+      0, 2, 3
+    };
 
-	glGenVertexArrays(1, &vao_id);
-	glBindVertexArray(vao_id);
+    glGenVertexArrays(1, &vao_id);
+    glBindVertexArray(vao_id);
 
-	glGenBuffers(1, &vbo_id);		
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &vbo_id);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ebo_id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_id);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glGenBuffers(1, &ebo_id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
 	//  Se asociaza atributul (0 = coordonate) pentru shader;
