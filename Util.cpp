@@ -1,4 +1,4 @@
-#include "Util.hpp"
+﻿#include "Util.hpp"
 
 void Util::loadTexture(const char* texturePath, GLuint& texture)
 {

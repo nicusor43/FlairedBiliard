@@ -22,10 +22,11 @@
 class PoolTable
 {
 public:
-    PoolTable();
-    ~PoolTable();
+	PoolTable();	
+	~PoolTable();
+	void render(glm::mat4 resize_matrix);
 private:
-    GLuint vao_id, vbo_id, ebo_id, texture;
-    void createVBO();
+	GLuint vao_id, vbo_id, ebo_id, texture, program_id, my_matrix_location;
+	void createVBO();
 };
 

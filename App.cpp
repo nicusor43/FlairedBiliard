@@ -1,22 +1,30 @@
 #include "App.hpp"
 
 glm::mat4 App::resize_matrix;
-std::unique_ptr<PoolTable> App::pool_table;
+PoolTable* App::pool_table = nullptr;
+
+void App::cleanup()
+{
+	delete pool_table;
+	pool_table = nullptr;
+}
 
 void App::init(int argc, char** argv)
 {
-    resize_matrix = glm::ortho(0, WIN_WIDTH, 0, WIN_HEIGHT);
+	resize_matrix = glm::ortho(0.0f, (float)WIN_WIDTH, 0.0f, (float)WIN_HEIGHT);
 
     initWindow(argc, argv);
 
     glewInit();
 
-    glutDisplayFunc(render);
-    glutIdleFunc(render);
+	pool_table = new PoolTable();
 
-    pool_table = std::make_unique<PoolTable>();
+	glutDisplayFunc(render);
+	glutIdleFunc(render);
 
-    glutMainLoop();
+	glutCloseFunc(cleanup);
+
+	glutMainLoop();
 }
 
 void App::initWindow(int argc, char** argv)
@@ -32,6 +40,10 @@ void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);	
 
-    glutSwapBuffers();
-    glFlush();
+	if (pool_table) {
+		pool_table->render(resize_matrix);
+	}
+	
+	glutSwapBuffers();
+	glFlush();
 }

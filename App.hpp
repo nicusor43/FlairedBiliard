@@ -21,10 +21,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "SOIL.h"	
 
 #include "PoolTable.hpp"
-
-#include <memory>
 
 class App
 {
@@ -37,10 +36,9 @@ public:
     static glm::mat4 resize_matrix;
 
 private:
-    static std::unique_ptr<PoolTable> pool_table;
-
-    static void initWindow(int argc, char** argv);
-
-    static void render();
+	static PoolTable* pool_table;
+	static void initWindow(int argc, char** argv);
+	static void render();
+	static void cleanup();
 };
 
