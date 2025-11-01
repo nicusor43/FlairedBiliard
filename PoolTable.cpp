@@ -3,7 +3,7 @@
 PoolTable::PoolTable()
 {
 	this->createVBO();
-	Util::loadTexture("table.png", this->texture);
+	Util::loadTexture("Assets/table.png", this->texture);
 
 	program_id = LoadShaders("shader.vert", "shader.frag");
 
