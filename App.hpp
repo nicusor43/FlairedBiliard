@@ -45,11 +45,16 @@ private:
     static std::vector<Ball*> balls;
     static bool ballHit;
 
+    static constexpr float COLLISION_FACTOR = 0.95f;
+    static constexpr float SURFACE_FRICTION_FACTOR = 0.2f;
+
     static void initWindow(int argc, char **argv);
     static void cleanup();
     static void handleInput(unsigned char key, int x, int y);
 
     static void ballsInteraction();
+    static void edgeCollision();
+    static void applySurfaceFriction();
 
     static void update();
     static void render();

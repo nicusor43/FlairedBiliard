@@ -21,8 +21,8 @@ void App::handleInput(unsigned char key, int x, int y)
 {
     if (key == ' ' && !ballHit)
     {
-        balls.back()->velocity.x = 1000.f;
-        balls.back()->velocity.y = 10.f;
+        balls.back()->velocity.x = 1500.f;
+        balls.back()->velocity.y = 5.f;
         ballHit = true;
     }
 }
@@ -80,8 +80,8 @@ void App::ballsInteraction()
             if (distance > 2.f * Ball::RADIUS)
                 continue;
 
-            const auto v1 = sqrtf(b1->velocity.x * b1->velocity.x + b1->velocity.y * b1->velocity.y);
-            const auto v2 = sqrtf(b2->velocity.x * b2->velocity.x + b2->velocity.y * b2->velocity.y);
+            const auto v1 = sqrtf(b1->velocity.x * b1->velocity.x + b1->velocity.y * b1->velocity.y) * COLLISION_FACTOR;
+            const auto v2 = sqrtf(b2->velocity.x * b2->velocity.x + b2->velocity.y * b2->velocity.y) * COLLISION_FACTOR;
 
             const auto theta1 = atan2f(b1->velocity.y, b1->velocity.x);
             const auto theta2 = atan2f(b2->velocity.y, b2->velocity.x);
@@ -104,6 +104,55 @@ void App::ballsInteraction()
     }
 }
 
+// TODO: Current margin is not pixel perfect
+void App::edgeCollision()
+{
+    constexpr float margin = 100.f;
+
+    constexpr float top_edge = Util::WIN_HEIGHT - margin;
+    constexpr float bottom_edge = margin;
+
+    constexpr float right_edge = Util::WIN_WIDTH - margin;
+    constexpr float left_edge = margin;
+
+    for (auto b : balls)
+    {
+        if (b->position.x + Ball::RADIUS > right_edge || b->position.x - Ball::RADIUS < left_edge)
+        {
+            b->velocity.x *= -1.f;
+            if (b->position.x + Ball::RADIUS > right_edge)
+                b->position.x = right_edge - Ball::RADIUS;
+            else
+                b->position.x = left_edge + Ball::RADIUS;
+        }
+        if (b->position.y + Ball::RADIUS > top_edge || b->position.y - Ball::RADIUS < bottom_edge)
+        {
+            b->velocity.y *= -1.f;
+            if (b->position.y + Ball::RADIUS > top_edge)
+                b->position.y = top_edge - Ball::RADIUS;
+            else
+                b->position.y = bottom_edge + Ball::RADIUS;
+        }
+    }
+}
+
+void App::applySurfaceFriction()
+{
+    constexpr float EPSILON = 5.f;
+    for (auto b : balls)
+    {
+        b->velocity.x *= 1.f - SURFACE_FRICTION_FACTOR * delta_time;
+        b->velocity.y *= 1.f - SURFACE_FRICTION_FACTOR * delta_time;
+
+        float speed = hypotf(b->velocity.x, b->velocity.y);
+        if (speed < EPSILON)
+        {
+            b->velocity.x = 0.0f;
+            b->velocity.y = 0.0f;
+        }
+    }
+}
+
 // This is probably pretty broken
 void App::update()
 {
@@ -114,6 +163,8 @@ void App::update()
     last_frame_time = current_time;
 
     ballsInteraction();
+    edgeCollision();
+    applySurfaceFriction();
     for (const auto ball : balls)
         ball->update(delta_time);
 
