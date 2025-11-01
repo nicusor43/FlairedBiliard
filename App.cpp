@@ -2,11 +2,15 @@
 
 glm::mat4 App::resize_matrix;
 PoolTable* App::pool_table = nullptr;
+Ball* App::ball = nullptr;
 
 void App::cleanup()
 {
 	delete pool_table;
 	pool_table = nullptr;
+
+	delete ball;
+	ball = nullptr;
 }
 
 void App::init(int argc, char** argv)
@@ -17,7 +21,11 @@ void App::init(int argc, char** argv)
 
     glewInit();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	pool_table = new PoolTable();
+	ball = new Ball();
 
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
@@ -42,6 +50,10 @@ void App::render()
 
 	if (pool_table) {
 		pool_table->render(resize_matrix);
+	}
+
+	if (ball) {
+		ball->render(resize_matrix);
 	}
 	
 	glutSwapBuffers();

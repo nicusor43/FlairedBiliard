@@ -24,6 +24,7 @@
 #include "SOIL.h"	
 
 #include "PoolTable.hpp"
+#include "Ball.hpp"
 
 class App
 {
@@ -37,6 +38,7 @@ public:
 
 private:
 	static PoolTable* pool_table;
+    static Ball* ball;
 	static void initWindow(int argc, char** argv);
 	static void render();
 	static void cleanup();

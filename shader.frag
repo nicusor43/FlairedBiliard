@@ -9,7 +9,7 @@ uniform sampler2D myTexture;
 
 void main(void)
 {
-    vec4 vertexColor = vec4(ex_Color, 1.0); 
+    
 
     out_Color = texture(myTexture, tex_Coord);	
 }   
