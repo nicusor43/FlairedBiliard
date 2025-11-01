@@ -1,11 +1,12 @@
 ﻿#include "Util.hpp"
 
-void Util::loadTexture(const char* texturePath, GLuint& texture)
+#include <iostream>
+
+void Util::loadTexture(const char *texturePath, GLuint &texture)
 {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // Setările de texturare rămân la fel
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -13,21 +14,55 @@ void Util::loadTexture(const char* texturePath, GLuint& texture)
 
     int width, height;
 
-    // --- MODIFICARE 1: Încarcă 4 canale (RGBA) în loc de 3 (RGB) ---
-    unsigned char* image = SOIL_load_image(texturePath, &width, &height, 0, SOIL_LOAD_RGBA);
+    unsigned char *image = SOIL_load_image(texturePath, &width, &height, 0, SOIL_LOAD_RGBA);
 
-    // --- MODIFICARE 3: Spune-i lui OpenGL să folosească formatul RGBA ---
-    glTexImage2D(GL_TEXTURE_2D,
-        0,                // Nivelul de Mipmap
-        GL_RGBA,          // Formatul intern al texturii pe GPU (în loc de GL_RGB)
-        width,            // Lățimea
-        height,           // Înălțimea
-        0,                // (Border - trebuie să fie 0)
-        GL_RGBA,          // Formatul datelor sursă (în loc de GL_RGB)
-        GL_UNSIGNED_BYTE, // Tipul de date al pixelilor
-        image);           // Pointer-ul către datele imaginii
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RGBA,
+        width,
+        height,
+        0,
+        GL_RGBA,
+        GL_UNSIGNED_BYTE,
+        image);
 
-    // Eliberarea resurselor
     SOIL_free_image_data(image);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// TODO: Cam nebunie ce se intampla aici
+std::vector<glm::vec2> Util::triangleRackPositions(unsigned rows, float r, float padding, glm::vec2 origin)
+{
+    std::swap(origin.x, origin.y);
+
+    std::vector<glm::vec2> positions;
+    positions.reserve((rows * (rows + 1)) / 2);
+
+    const float r_eff = r + padding * 0.5f;
+    const float dy = 1.5f * r_eff;
+    const float dx = std::sqrt(3.0f) * r_eff;
+
+    const float triangle_width = dx * rows;
+    const float triangle_height = dy * (rows - 1);
+
+    const float apex_x = origin.x - (triangle_width - dx) * 0.5f;
+    const float apex_y = origin.y - triangle_height * 0.5f;
+
+    for (unsigned row = 0; row < rows; ++row)
+    {
+        unsigned count = row + 1;
+
+        float row_width = dx * count;
+        float row_start_x = apex_x + (triangle_width - row_width) * 0.5f;
+
+        float y = apex_y + row * dy;
+        for (unsigned i = 0; i < count; ++i)
+        {
+            float x = row_start_x + i * dx;
+            positions.emplace_back(y, x);
+        }
+    }
+
+    return positions;
 }

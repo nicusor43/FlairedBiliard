@@ -19,14 +19,22 @@
 
 #include "Util.hpp"
 
+#include <cmath>
+#include <string>
+
 class Ball
 {
 public:
-	Ball();
-	~Ball();
-	void render(glm::mat4 resize_matrix);
-private:
-	GLuint vao_id, vbo_id, ebo_id, texture, program_id, my_matrix_location;
-	void createVBO();
-};
+    Ball(unsigned int ball_number, glm::vec2 position);
+    ~Ball();
 
+    static constexpr float RADIUS = 25.f;
+
+    void render(glm::mat4 resize_matrix);
+private:
+    glm::mat4 transform = glm::mat4(1.f);
+    glm::vec2 position;
+
+    GLuint vao_id, vbo_id, ebo_id, texture, program_id, my_matrix_location;
+    void createVBO();
+};

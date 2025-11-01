@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(_WIN32)
-    #include <windows.h>
+#include <windows.h>
 #endif
 
 #include <stdlib.h>
@@ -10,37 +10,35 @@
 #include <GL/freeglut.h>
 
 #if defined(_WIN32)
-    #include "loadShaders.h"
-    #include "SOIL.h"
+#include "loadShaders.h"
+#include "SOIL.h"
 #else
-    #include "external/loadShaders.h"
-    #include "external/soil/include/SOIL/SOIL.h"
+#include "external/loadShaders.h"
+#include "external/soil/include/SOIL/SOIL.h"
 #endif
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "SOIL.h"	
 
 #include "PoolTable.hpp"
 #include "Ball.hpp"
+#include "Util.hpp"
+
+#include <vector>
 
 class App
 {
 public:
-    static void init(int argc, char** argv);
-
-    static const int WIN_WIDTH = 1920;
-    static const int WIN_HEIGHT = 1080;
+    static void init(int argc, char **argv);
 
     static glm::mat4 resize_matrix;
 
 private:
-	static PoolTable* pool_table;
-    static Ball* ball;
-	static void initWindow(int argc, char** argv);
-	static void render();
-	static void cleanup();
+    static PoolTable *pool_table;
+    static std::vector<Ball*> balls;
+    static void initWindow(int argc, char **argv);
+    static void render();
+    static void cleanup();
 };
-
