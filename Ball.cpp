@@ -61,6 +61,8 @@ void Ball::update(float dt)
 {
     this->position.x += this->velocity.x * dt;
     this->position.y += this->velocity.y * dt;
+
+    this->angle += this->angularVelocity * dt;
 }
 
 void Ball::render(glm::mat4 resize_matrix)
@@ -69,7 +71,9 @@ void Ball::render(glm::mat4 resize_matrix)
 
     glBindVertexArray(vao_id);
 
-    transform = resize_matrix * glm::translate(glm::vec3(this->position.x, this->position.y, 0.f));
+    glm::mat4 transformata = glm::translate(glm::mat4(1.0f), glm::vec3(this->position.x, this->position.y, 0.f));
+    glm::mat4 rotatia = glm::rotate(glm::mat4(1.0f), this->angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = resize_matrix * transformata * rotatia;
 
     glUniformMatrix4fv(my_matrix_location, 1, GL_FALSE, &transform[0][0]);
 

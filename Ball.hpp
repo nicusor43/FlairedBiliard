@@ -33,6 +33,10 @@ public:
     glm::vec2 position = glm::vec2{0.f, 0.f};
     glm::vec2 velocity = glm::vec2{0.f, 0.f};
 
+    // Unghiul este in radiani
+    float angle = 0.f;
+    float angularVelocity = 0.f;
+
     void update(float dt);
     void render(glm::mat4 resize_matrix);
 private:

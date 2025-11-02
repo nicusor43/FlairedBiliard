@@ -100,6 +100,16 @@ void App::ballsInteraction()
 
             const auto phi = Util::rotationToPoint(b1->position, b2->position);
 
+            glm::vec2 tangent = glm::vec2(cosf(phi + Util::PI / 2.f), sinf(phi + Util::PI / 2.f));
+            glm::vec2 relVel = glm::vec2(b2->velocity.x - b1->velocity.x, b2->velocity.y - b1->velocity.y);
+            float relTangential = glm::dot(relVel, tangent); 
+
+            constexpr float spin_factor = 0.5f; 
+            if (abs(relTangential) > 0.0001f) {
+                b1->angularVelocity -= spin_factor * relTangential / Ball::RADIUS;
+                b2->angularVelocity += spin_factor * relTangential / Ball::RADIUS;
+            }
+
             b1->velocity.x = v2 * cosf(theta2 - phi) * cosf(phi) + v1 * sinf(theta1 - phi) * cosf(phi + Util::PI / 2.f);
             b1->velocity.y = v2 * cosf(theta2 - phi) * sinf(phi) + v1 * sinf(theta1 - phi) * sinf(phi + Util::PI / 2.f);
 
@@ -162,6 +172,8 @@ void App::applySurfaceFriction()
             b->velocity.x = 0.0f;
             b->velocity.y = 0.0f;
         }
+
+        b->angularVelocity *= 1.f - SURFACE_FRICTION_FACTOR * delta_time;
     }
 }
 

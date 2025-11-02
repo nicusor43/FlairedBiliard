@@ -58,6 +58,7 @@ private:
     static void ballsInteraction();
     static void edgeCollision();
     static void applySurfaceFriction();
+    static void applyRotation();
     static bool allBallsStopped();
 
     static void update();
