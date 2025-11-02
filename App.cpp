@@ -6,7 +6,8 @@ std::chrono::time_point<std::chrono::steady_clock> App::last_frame_time = std::c
 glm::mat4 App::resize_matrix;
 PoolTable *App::pool_table = nullptr;
 std::vector<Ball *> App::balls;
-bool App::ballHit = false;
+bool App::ball_hit = false;
+Ball* App::white_ball = nullptr;
 
 void App::cleanup()
 {
@@ -17,13 +18,22 @@ void App::cleanup()
         delete ball;
 }
 
-void App::handleInput(unsigned char key, int x, int y)
+void App::handleKeyboardInput(unsigned char key, int x, int y)
 {
-    if (key == ' ' && !ballHit)
+}
+
+void App::handleMouseInput(int button, int state, int x, int y)
+{
+    y = Util::WIN_HEIGHT - y;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
     {
-        balls.back()->velocity.x = 1500.f;
-        balls.back()->velocity.y = 5.f;
-        ballHit = true;
+        if (!allBallsStopped())
+            return;
+
+        const auto angle = Util::rotationToPoint(glm::vec2{x, y}, white_ball->position);
+
+        white_ball->velocity.x = WHITE_BALL_HIT_SPEED * cosf(angle);
+        white_ball->velocity.y = WHITE_BALL_HIT_SPEED * sinf(angle);
     }
 }
 
@@ -45,10 +55,12 @@ void App::init(int argc, char **argv)
     for (int i = 0; i < 15; ++i)
         balls.push_back(new Ball(i + 1, positions[i]));
     balls.push_back(new Ball(16, glm::vec2{Util::WIN_WIDTH / 5.f, Util::WIN_HEIGHT / 2.f}));
+    white_ball = balls.back();
 
     glutDisplayFunc(render);
     glutIdleFunc(update);
-    glutKeyboardFunc(handleInput);
+    glutKeyboardFunc(handleKeyboardInput);
+    glutMouseFunc(handleMouseInput);
 
     glutCloseFunc(cleanup);
 
@@ -153,7 +165,18 @@ void App::applySurfaceFriction()
     }
 }
 
-// This is probably pretty broken
+bool App::allBallsStopped()
+{
+    auto velocity_sum = glm::vec2{0.f};
+    for (auto b : balls)
+    {
+        velocity_sum.x += b->velocity.x;
+        velocity_sum.y += b->velocity.y;
+    }
+
+    return velocity_sum.x == 0.f && velocity_sum.y == 0.f;
+}
+
 void App::update()
 {
     using namespace std::chrono;

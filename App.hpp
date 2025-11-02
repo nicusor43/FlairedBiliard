@@ -43,18 +43,22 @@ private:
 
     static PoolTable *pool_table;
     static std::vector<Ball*> balls;
-    static bool ballHit;
+    static bool ball_hit;
+    static Ball* white_ball;
 
-    static constexpr float COLLISION_FACTOR = 0.95f;
-    static constexpr float SURFACE_FRICTION_FACTOR = 0.2f;
+    static constexpr float COLLISION_FACTOR = 0.9f;
+    static constexpr float SURFACE_FRICTION_FACTOR = 0.5f;
+    static constexpr float WHITE_BALL_HIT_SPEED = 1500.f;
 
     static void initWindow(int argc, char **argv);
     static void cleanup();
-    static void handleInput(unsigned char key, int x, int y);
+    static void handleKeyboardInput(unsigned char key, int x, int y);
+    static void handleMouseInput(int button, int state, int x, int y);
 
     static void ballsInteraction();
     static void edgeCollision();
     static void applySurfaceFriction();
+    static bool allBallsStopped();
 
     static void update();
     static void render();
