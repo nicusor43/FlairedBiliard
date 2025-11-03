@@ -12,7 +12,6 @@ Cue::Cue()
 {
     createVBO();
 
-    // load texture (Util::loadTexture returns GLuint into second param)
     Util::loadTexture("Assets/pool_cue.png", this->texture);
 
     program_id = LoadShaders("shader.vert", "shader.frag");
@@ -64,7 +63,6 @@ void Cue::createVBO()
 
 void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt)
 {
-    // compute aim direction
     glm::vec2 dir = aim_pos - center;
     float len = glm::length(dir);
     float ang = angle;
@@ -72,7 +70,6 @@ void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const 
         ang = atan2f(dir.y, dir.x);
     }
 
-    // offset so cue is further away from ball center (increase gap)
     const float gap = Ball::RADIUS + 6.0f;
     const float extra_distance = length * -0.2f;
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.0f));

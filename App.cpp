@@ -42,7 +42,6 @@ void App::handleMouseInput(int button, int state, int x, int y)
         if (!allBallsStopped())
             return;
 
-        // prefer current aim_pos (updated by passive mouse) but fall back to this click coords
         glm::vec2 target = aim_pos;
         if (glm::length(target - white_ball->position) < 1e-3f)
             target = glm::vec2{static_cast<float>(x), static_cast<float>(y)};
@@ -74,7 +73,6 @@ void App::init(int argc, char **argv)
     balls.push_back(new Ball(16, glm::vec2{Util::WIN_WIDTH / 5.f, Util::WIN_HEIGHT / 2.f}));
     white_ball = balls.back();
 
-    // create cue (uses Assets/pool_cue.png as in Cue.cpp)
     cue = new Cue();
     aim_pos = white_ball->position + glm::vec2{100.f, 0.f};
 
@@ -82,7 +80,7 @@ void App::init(int argc, char **argv)
     glutIdleFunc(update);
     glutKeyboardFunc(handleKeyboardInput);
     glutMouseFunc(handleMouseInput);
-    glutPassiveMotionFunc(passiveMouseCallback); // track mouse for aiming visualization
+    glutPassiveMotionFunc(passiveMouseCallback); 
     glutMotionFunc(passiveMouseCallback);
 
     glutCloseFunc(cleanup);

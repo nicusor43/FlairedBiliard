@@ -30,15 +30,9 @@ public:
 
     void createVBO();
 
-    // resize_matrix: projection matrix (same as App::resize_matrix)
-    // center: white ball position
-    // aim_pos: mouse/world aim position
-    // spinning: when true the cue slowly rotates around the white ball
-    // dt: delta time in seconds
     void render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt);
 
 private:
-    // GL objects
     GLuint vao_id = 0;
     GLuint vbo_id = 0;
     GLuint ebo_id = 0;
@@ -46,13 +40,11 @@ private:
     GLuint program_id = 0;
     GLint my_matrix_location = -1;
 
-    // transform / position state
     glm::mat4 transform = glm::mat4(1.0f);
-    glm::vec2 position = glm::vec2(0.0f, 0.0f); // kept to match Cue.cpp usage
-
-    // visual properties
-    float angle = 0.0f;                 // current angle (radians)
-    float spin_speed = glm::radians(60.0f); // rad/s when spinning
-    float length = 420.0f;              // cue length in pixels
-    float thickness = 10.0f;            // visual thickness in pixels
+    glm::vec2 position = glm::vec2(0.0f, 0.0f); 
+    
+    float angle = 0.0f;                 
+    float spin_speed = glm::radians(60.0f); 
+    float length = 420.0f;              
+    float thickness = 10.0f;            
 };
