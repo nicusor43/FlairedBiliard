@@ -160,50 +160,18 @@ void App::edgeCollision()
     const float POCKET_ALLOWANCE = Ball::RADIUS * 1.0f;    
     const float POCKET_INSIDE = Ball::RADIUS * 1.0f;  
 
-    std::vector<glm::vec2> pocketCenters = {
-        {left_edge, bottom_edge},                               
-        {(left_edge + right_edge) * 0.5f, bottom_edge},         
-        {right_edge, bottom_edge},                              
-        {left_edge, top_edge},                                  
-        {(left_edge + right_edge) * 0.5f, top_edge},            
-        {right_edge, top_edge}                                  
-    };
-
     for (auto b : balls)
     {
-        bool skipX = false;
-        bool skipY = false;
-
-        for (const auto &c : pocketCenters)
-        {
-            float dx = b->position.x - c.x;
-            float dy = b->position.y - c.y;
-
-            if (c.x == left_edge || c.x == right_edge)
-            {
-                if (fabsf(dx) <= POCKET_ALLOWANCE && fabsf(dy) <= POCKET_INSIDE)
-                    skipX = true;
-            }
-
-            if (c.y == top_edge || c.y == bottom_edge)
-            {
-                if (fabsf(dy) <= POCKET_ALLOWANCE && fabsf(dx) <= POCKET_INSIDE)
-                    skipY = true;
-            }
-
-            if (skipX && skipY) break;
-        }
-
-        if (!skipX && (b->position.x + Ball::RADIUS > right_edge || b->position.x - Ball::RADIUS < left_edge))
-        {
+        if (b->position.x + Ball::RADIUS > right_edge || b->position.x - Ball::RADIUS < left_edge) {
             b->velocity.x *= -1.f;
+
             if (b->position.x + Ball::RADIUS > right_edge)
                 b->position.x = right_edge - Ball::RADIUS;
+
             else
                 b->position.x = left_edge + Ball::RADIUS;
         }
-
-        if (!skipY && (b->position.y + Ball::RADIUS > top_edge || b->position.y - Ball::RADIUS < bottom_edge))
+         if (b->position.y + Ball::RADIUS > top_edge || b->position.y - Ball::RADIUS < bottom_edge)
         {
             b->velocity.y *= -1.f;
             if (b->position.y + Ball::RADIUS > top_edge)
@@ -213,6 +181,7 @@ void App::edgeCollision()
         }
     }
 }
+
 
 void App::applySurfaceFriction()
 {
