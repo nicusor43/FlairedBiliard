@@ -11,17 +11,15 @@
 
 Cue::Cue()
 {
-    // Shader pentru linie/punct
     line_program = LoadShaders("line.vert", "line.frag");
     line_matrix_loc = glGetUniformLocation(line_program, "mat");
     line_color_loc  = glGetUniformLocation(line_program, "in_Color");
 
     createVBO();
-    initLineVAO(); // VAO + VBO pentru linie/marker
+    initLineVAO(); 
 
     Util::loadTexture("Assets/pool_cue.png", this->texture);
 
-    // Shader pentru tac
     program_id = LoadShaders("shader.vert", "shader.frag");
     my_matrix_location = glGetUniformLocation(program_id, "myMatrix");
 
@@ -44,7 +42,6 @@ void Cue::createVBO()
 {
     const float half_h = thickness * 0.5f;
     GLfloat vertices[] = {
-        // x, y, z, w,    r,g,b,     u,v
         0.0f, -half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
         length, -half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
         length, half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
@@ -70,7 +67,6 @@ void Cue::createVBO()
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)(7 * sizeof(GLfloat)));
 
-    // glBindVertexArray(0);
 }
 
 void Cue::initLineVAO() {
@@ -79,8 +75,8 @@ void Cue::initLineVAO() {
 
     glBindVertexArray(line_vao);
     glBindBuffer(GL_ARRAY_BUFFER, line_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, nullptr, GL_DYNAMIC_DRAW); // Changed from 4 to 8 (2 points * 4 floats)
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0); // Changed from 2 to 4 components
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, nullptr, GL_DYNAMIC_DRAW); 
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0); 
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 }
