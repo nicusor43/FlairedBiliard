@@ -24,6 +24,7 @@
 
 #include "PoolTable.hpp"
 #include "Ball.hpp"
+#include "Cue.hpp"
 #include "Util.hpp"
 
 #include <chrono>

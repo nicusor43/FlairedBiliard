@@ -13,6 +13,7 @@ add_executable(biliard main.cpp
     PoolTable.hpp PoolTable.cpp
     Util.hpp Util.cpp
     Ball.hpp Ball.cpp
+    Cue.hpp Cue.cpp
     external/loadShaders.h external/loadShaders.cpp)
 
 target_link_libraries(biliard PRIVATE
