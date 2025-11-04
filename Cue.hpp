@@ -30,21 +30,34 @@ public:
 
     void createVBO();
 
+    // renderizează tacul și linia de țintire
     void render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt);
 
 private:
-    GLuint vao_id = 0;
-    GLuint vbo_id = 0;
-    GLuint ebo_id = 0;
-    GLuint texture = 0;
-    GLuint program_id = 0;
+    // --- Tac ---
+    GLuint vao_id      = 0;
+    GLuint vbo_id      = 0;
+    GLuint ebo_id      = 0;
+    GLuint texture     = 0;
+    GLuint program_id  = 0;
     GLint my_matrix_location = -1;
 
     glm::mat4 transform = glm::mat4(1.0f);
-    glm::vec2 position = glm::vec2(0.0f, 0.0f); 
+    glm::vec2 position  = glm::vec2(0.0f, 0.0f); 
     
-    float angle = 0.0f;                 
-    float spin_speed = glm::radians(60.0f); 
-    float length = 420.0f;              
-    float thickness = 10.0f;            
+    float angle       = 0.0f;                 
+    float spin_speed  = glm::radians(60.0f); 
+    float length      = 420.0f;              
+    float thickness   = 10.0f;    
+
+    // --- Linie / Marker ---
+    GLuint line_vao   = 0;
+    GLuint line_vbo   = 0;
+    GLuint line_program = 0;
+    GLint  line_matrix_loc = -1;
+    GLint  line_color_loc  = -1;
+
+    // funcții interne
+    void drawLineAndMarker(const glm::vec2& center, const glm::vec2& aim_pos, float len, float angle, const glm::mat4& proj_matrix);
+    void initLineVAO();
 };
