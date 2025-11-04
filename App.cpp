@@ -132,8 +132,8 @@ void App::ballsInteraction()
             constexpr float spin_factor = 0.5f;
             if (abs(rel_tangential) > 0.0001f)
             {
-                b1->angular_velocity -= spin_factor * rel_tangential / Ball::RADIUS;
-                b2->angular_velocity += spin_factor * rel_tangential / Ball::RADIUS;
+                b1->angular_velocity += spin_factor * rel_tangential / Ball::RADIUS;
+                b2->angular_velocity -= spin_factor * rel_tangential / Ball::RADIUS;
             }
 
             b1->velocity.x = v2 * cosf(theta2 - phi) * cosf(phi) + v1 * sinf(theta1 - phi) * cosf(phi + Util::PI / 2.f);
