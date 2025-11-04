@@ -149,16 +149,14 @@ void App::ballsInteraction()
 // TODO: Current margin is not pixel perfect
 void App::edgeCollision()
 {
-    constexpr float margin = 100.f;
+    constexpr float horizontal_mergin = 92.f;
+    constexpr float vertical_margin = 92.f;
 
-    constexpr float top_edge = Util::WIN_HEIGHT - margin;
-    constexpr float bottom_edge = margin;
+    constexpr float top_edge = Util::WIN_HEIGHT - vertical_margin;
+    constexpr float bottom_edge = vertical_margin;
 
-    constexpr float right_edge = Util::WIN_WIDTH - margin;
-    constexpr float left_edge = margin;
-
-    const float POCKET_ALLOWANCE = Ball::RADIUS * 1.0f;    
-    const float POCKET_INSIDE = Ball::RADIUS * 1.0f;  
+    constexpr float right_edge = Util::WIN_WIDTH - horizontal_mergin;
+    constexpr float left_edge = horizontal_mergin;
 
     for (auto b : balls)
     {
@@ -167,7 +165,6 @@ void App::edgeCollision()
 
             if (b->position.x + Ball::RADIUS > right_edge)
                 b->position.x = right_edge - Ball::RADIUS;
-
             else
                 b->position.x = left_edge + Ball::RADIUS;
         }
@@ -228,8 +225,7 @@ void App::update()
     for (const auto ball : balls)
         ball->update(delta_time);
 
-    // 60fps
-    std::this_thread::sleep_for(16ms);
+    std::this_thread::sleep_for(5ms);
 
     glutPostRedisplay();
 }
