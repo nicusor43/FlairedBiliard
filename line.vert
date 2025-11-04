@@ -7,5 +7,4 @@ void main()
 {
     ex_Color = in_Color;
     gl_Position = mat * in_Pos;   
-    gl_PointSize = 6.0;
 }
