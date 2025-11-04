@@ -43,9 +43,9 @@ private:
     static std::chrono::time_point<std::chrono::steady_clock> last_frame_time;
 
     static PoolTable *pool_table;
-    static std::vector<Ball*> balls;
+    static std::vector<Ball *> balls;
     static bool ball_hit;
-    static Ball* white_ball;
+    static Ball *white_ball;
 
     static constexpr float COLLISION_FACTOR = 0.9f;
     static constexpr float SURFACE_FRICTION_FACTOR = 0.5f;
@@ -59,7 +59,6 @@ private:
     static void ballsInteraction();
     static void edgeCollision();
     static void applySurfaceFriction();
-    static void applyRotation();
     static bool allBallsStopped();
 
     static void update();

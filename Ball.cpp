@@ -62,7 +62,7 @@ void Ball::update(float dt)
     this->position.x += this->velocity.x * dt;
     this->position.y += this->velocity.y * dt;
 
-    this->angle += this->angularVelocity * dt;
+    this->angle += this->angular_velocity * dt;
 }
 
 void Ball::render(glm::mat4 resize_matrix)

@@ -10,11 +10,11 @@
 #include <GL/freeglut.h>
 
 #if defined(_WIN32)
-    #include "loadShaders.h"
-    #include "SOIL.h"
+#include "loadShaders.h"
+#include "SOIL.h"
 #else
-    #include "external/loadShaders.h"
-    #include "external/soil/include/SOIL/SOIL.h"
+#include "external/loadShaders.h"
+#include "external/soil/include/SOIL/SOIL.h"
 #endif
 
 #include "glm/glm.hpp"
@@ -23,14 +23,15 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "external/soil/include/SOIL/SOIL.h"
 
-class Cue {
+class Cue
+{
 public:
     Cue();
     ~Cue();
 
     void createVBO();
 
-    void render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt);
+    void render(const glm::mat4 &resize_matrix, const glm::vec2 &center, const glm::vec2 &aim_pos, float dt);
 
     float getPower() const { return current_power; };
 private:

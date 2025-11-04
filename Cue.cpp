@@ -44,13 +44,13 @@ void Cue::createVBO()
 {
     const float half_h = thickness * 0.5f;
     GLfloat vertices[] = {
-        0.0f,      -half_h, 0.0f, 1.0f,   1.0f,1.0f,1.0f,   0.0f, 0.0f,
-        length,    -half_h, 0.0f, 1.0f,   1.0f,1.0f,1.0f,   1.0f, 0.0f,
-        length,     half_h, 0.0f, 1.0f,   1.0f,1.0f,1.0f,   1.0f, 1.0f,
-        0.0f,      half_h,  0.0f, 1.0f,   1.0f,1.0f,1.0f,   0.0f, 1.0f
-    };
+        // x, y, z, w,    r,g,b,     u,v
+        0.0f, -half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        length, -half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        length, half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.0f, half_h, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
-    GLuint indices[] = { 0,1,2, 0,2,3 };
+    GLuint indices[] = {0, 1, 2, 0, 2, 3};
 
     glGenVertexArrays(1, &vao_id);
     glBindVertexArray(vao_id);
@@ -64,13 +64,13 @@ void Cue::createVBO()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)(4 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid *)(4 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)(7 * sizeof(GLfloat)));
 
-    glBindVertexArray(0);
+    // glBindVertexArray(0);
 }
 
 void Cue::initLineVAO() {
@@ -85,12 +85,13 @@ void Cue::initLineVAO() {
     glBindVertexArray(0);
 }
 
-void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt)
+void Cue::render(const glm::mat4 &resize_matrix, const glm::vec2 &center, const glm::vec2 &aim_pos, float dt)
 {
     glm::vec2 dir = aim_pos - center;
     float len = glm::length(dir);
     float ang = angle;
-    if (len > 1e-4f) {
+    if (len > 1e-4f)
+    {
         ang = atan2f(dir.y, dir.x);
     }
 
@@ -100,7 +101,7 @@ void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const 
     const float extra_distance = length * -0.2f;
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.0f));
     model = glm::rotate(model, ang, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, glm::vec3(- (gap + extra_distance), 0.0f, 0.0f));
+    model = glm::translate(model, glm::vec3(-(gap + extra_distance), 0.0f, 0.0f));
 
     transform = resize_matrix * model;
 
