@@ -35,7 +35,7 @@ public:
 
     // Unghiul este in radiani
     float angle = 0.f;
-    float angularVelocity = 0.f;
+    float angular_velocity = 0.f;
 
     void update(float dt);
     void render(glm::mat4 resize_matrix);

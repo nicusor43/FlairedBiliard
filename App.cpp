@@ -7,9 +7,9 @@ glm::mat4 App::resize_matrix;
 PoolTable *App::pool_table = nullptr;
 std::vector<Ball *> App::balls;
 bool App::ball_hit = false;
-Ball* App::white_ball = nullptr;
+Ball *App::white_ball = nullptr;
 
-static Cue* cue = nullptr;
+static Cue *cue = nullptr;
 static glm::vec2 aim_pos = glm::vec2{0.f, 0.f};
 
 void App::cleanup()
@@ -80,7 +80,7 @@ void App::init(int argc, char **argv)
     glutIdleFunc(update);
     glutKeyboardFunc(handleKeyboardInput);
     glutMouseFunc(handleMouseInput);
-    glutPassiveMotionFunc(passiveMouseCallback); 
+    glutPassiveMotionFunc(passiveMouseCallback);
     glutMotionFunc(passiveMouseCallback);
 
     glutCloseFunc(cleanup);
@@ -121,13 +121,14 @@ void App::ballsInteraction()
             const auto phi = Util::rotationToPoint(b1->position, b2->position);
 
             glm::vec2 tangent = glm::vec2(cosf(phi + Util::PI / 2.f), sinf(phi + Util::PI / 2.f));
-            glm::vec2 relVel = glm::vec2(b2->velocity.x - b1->velocity.x, b2->velocity.y - b1->velocity.y);
-            float relTangential = glm::dot(relVel, tangent); 
+            glm::vec2 rel_vel = glm::vec2(b2->velocity.x - b1->velocity.x, b2->velocity.y - b1->velocity.y);
+            float rel_tangential = glm::dot(rel_vel, tangent);
 
-            constexpr float spin_factor = 0.5f; 
-            if (abs(relTangential) > 0.0001f) {
-                b1->angularVelocity -= spin_factor * relTangential / Ball::RADIUS;
-                b2->angularVelocity += spin_factor * relTangential / Ball::RADIUS;
+            constexpr float spin_factor = 0.5f;
+            if (abs(rel_tangential) > 0.0001f)
+            {
+                b1->angular_velocity -= spin_factor * rel_tangential / Ball::RADIUS;
+                b2->angular_velocity += spin_factor * rel_tangential / Ball::RADIUS;
             }
 
             b1->velocity.x = v2 * cosf(theta2 - phi) * cosf(phi) + v1 * sinf(theta1 - phi) * cosf(phi + Util::PI / 2.f);
@@ -160,7 +161,8 @@ void App::edgeCollision()
 
     for (auto b : balls)
     {
-        if (b->position.x + Ball::RADIUS > right_edge || b->position.x - Ball::RADIUS < left_edge) {
+        if (b->position.x + Ball::RADIUS > right_edge || b->position.x - Ball::RADIUS < left_edge)
+        {
             b->velocity.x *= -1.f;
 
             if (b->position.x + Ball::RADIUS > right_edge)
@@ -168,7 +170,7 @@ void App::edgeCollision()
             else
                 b->position.x = left_edge + Ball::RADIUS;
         }
-         if (b->position.y + Ball::RADIUS > top_edge || b->position.y - Ball::RADIUS < bottom_edge)
+        if (b->position.y + Ball::RADIUS > top_edge || b->position.y - Ball::RADIUS < bottom_edge)
         {
             b->velocity.y *= -1.f;
             if (b->position.y + Ball::RADIUS > top_edge)
@@ -178,7 +180,6 @@ void App::edgeCollision()
         }
     }
 }
-
 
 void App::applySurfaceFriction()
 {
@@ -195,7 +196,7 @@ void App::applySurfaceFriction()
             b->velocity.y = 0.0f;
         }
 
-        b->angularVelocity *= 1.f - SURFACE_FRICTION_FACTOR * delta_time;
+        b->angular_velocity *= 1.f - SURFACE_FRICTION_FACTOR * delta_time;
     }
 }
 
@@ -239,7 +240,8 @@ void App::render()
     for (auto ball : balls)
         ball->render(resize_matrix);
 
-    if (allBallsStopped()) {
+    if (allBallsStopped())
+    {
         cue->render(resize_matrix, white_ball->position, aim_pos, delta_time);
     }
     glutSwapBuffers();

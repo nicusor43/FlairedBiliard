@@ -10,11 +10,11 @@
 #include <GL/freeglut.h>
 
 #if defined(_WIN32)
-    #include "loadShaders.h"
-    #include "SOIL.h"
+#include "loadShaders.h"
+#include "SOIL.h"
 #else
-    #include "external/loadShaders.h"
-    #include "external/soil/include/SOIL/SOIL.h"
+#include "external/loadShaders.h"
+#include "external/soil/include/SOIL/SOIL.h"
 #endif
 
 #include "glm/glm.hpp"
@@ -23,14 +23,15 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "external/soil/include/SOIL/SOIL.h"
 
-class Cue {
+class Cue
+{
 public:
     Cue();
     ~Cue();
 
     void createVBO();
 
-    void render(const glm::mat4& resize_matrix, const glm::vec2& center, const glm::vec2& aim_pos, float dt);
+    void render(const glm::mat4 &resize_matrix, const glm::vec2 &center, const glm::vec2 &aim_pos, float dt);
 
 private:
     GLuint vao_id = 0;
@@ -41,10 +42,10 @@ private:
     GLint my_matrix_location = -1;
 
     glm::mat4 transform = glm::mat4(1.0f);
-    glm::vec2 position = glm::vec2(0.0f, 0.0f); 
-    
-    float angle = 0.0f;                 
-    float spin_speed = glm::radians(60.0f); 
-    float length = 420.0f;              
-    float thickness = 10.0f;            
+    glm::vec2 position = glm::vec2(0.0f, 0.0f);
+
+    float angle = 0.0f;
+    float spin_speed = glm::radians(60.0f);
+    float length = 420.0f;
+    float thickness = 10.0f;
 };
