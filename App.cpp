@@ -48,8 +48,12 @@ void App::handleMouseInput(int button, int state, int x, int y)
 
         const auto angle = Util::rotationToPoint(target, white_ball->position);
 
-        white_ball->velocity.x = WHITE_BALL_HIT_SPEED * cosf(angle);
-        white_ball->velocity.y = WHITE_BALL_HIT_SPEED * sinf(angle);
+        float power = glm::max(0.2f, cue->getPower()); // Minimum 10% power
+        float shot_speed = WHITE_BALL_HIT_SPEED * power;
+ 
+
+        white_ball->velocity.x = shot_speed * cosf(angle);
+        white_ball->velocity.y = shot_speed * sinf(angle);
     }
 }
 

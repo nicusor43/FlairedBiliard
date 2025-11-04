@@ -13,8 +13,8 @@ Cue::Cue()
 {
     // Shader pentru linie/punct
     line_program = LoadShaders("line.vert", "line.frag");
-    line_matrix_loc = glGetUniformLocation(line_program, "uMatrix");
-    line_color_loc  = glGetUniformLocation(line_program, "uColor");
+    line_matrix_loc = glGetUniformLocation(line_program, "mat");
+    line_color_loc  = glGetUniformLocation(line_program, "in_Color");
 
     createVBO();
     initLineVAO(); // VAO + VBO pentru linie/marker
@@ -79,8 +79,8 @@ void Cue::initLineVAO() {
 
     glBindVertexArray(line_vao);
     glBindBuffer(GL_ARRAY_BUFFER, line_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4, nullptr, GL_DYNAMIC_DRAW); // 2 puncte x,y
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, nullptr, GL_DYNAMIC_DRAW); // Changed from 4 to 8 (2 points * 4 floats)
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0); // Changed from 2 to 4 components
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 }
@@ -93,6 +93,8 @@ void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const 
     if (len > 1e-4f) {
         ang = atan2f(dir.y, dir.x);
     }
+
+    current_power = glm::clamp(len / max_power_distance, 0.f, 1.f);
 
     const float gap = Ball::RADIUS + 6.0f;
     const float extra_distance = length * -0.2f;
@@ -114,12 +116,11 @@ void Cue::render(const glm::mat4& resize_matrix, const glm::vec2& center, const 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    drawLineAndMarker(center, aim_pos, len, ang, resize_matrix);
+    drawLineAndMarker(center, aim_pos, len, ang, resize_matrix, current_power);
 }
 
-// --- Funcția linie/punct cu GLUT ---
 void Cue::drawLineAndMarker(const glm::vec2& center, const glm::vec2& aim_pos,
-                            float len, float angle, const glm::mat4& proj_matrix)
+                            float len, float angle, const glm::mat4& resize_matrix, float power)
 {
     glm::vec2 dir_n = len > 1e-4f ? glm::normalize(aim_pos - center)
                                   : glm::vec2(cosf(angle), sinf(angle));
@@ -129,38 +130,27 @@ void Cue::drawLineAndMarker(const glm::vec2& center, const glm::vec2& aim_pos,
     glm::vec2 line_start = center - dir_n * (ball_radius + GAP_BEHIND_BALL);
 
     const float MAX_LINE_LENGTH = 150.0f;
-    float current_line_length = glm::clamp(len, 0.0f, MAX_LINE_LENGTH);
+    float current_line_length = power * MAX_LINE_LENGTH; 
     glm::vec2 line_end = line_start - dir_n * current_line_length;
 
-    // --- Dimensiunea ferestrei cu GLUT ---
-    int screen_width  = glutGet(GLUT_WINDOW_WIDTH);
-    int screen_height = glutGet(GLUT_WINDOW_HEIGHT);
-
-    auto toNDC = [&](glm::vec2 pos) -> glm::vec2 {
-    float x = 2.0f * pos.x / float(screen_width) - 1.0f;
-    float y = 2.0f * pos.y / float(screen_height) - 1.0f; // schimbăm semnul aici
-    return glm::vec2(x, y);
-};
-
-    glm::vec2 ndc_start = toNDC(line_start);
-    glm::vec2 ndc_end   = toNDC(line_end);
-    glm::vec2 ndc_point = toNDC(aim_pos);
-
     float line_vertices[] = {
-        ndc_start.x, ndc_start.y,
-        ndc_end.x,   ndc_end.y
+        line_start.x, line_start.y, 0.0f, 1.0f,
+        line_end.x,   line_end.y,   0.0f, 1.0f
     };
-
-    float point_vertex[] = { ndc_point.x, ndc_point.y };
 
     glUseProgram(line_program);
     glBindVertexArray(line_vao);
     glBindBuffer(GL_ARRAY_BUFFER, line_vbo);
 
-    // Linie albă
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line_vertices), line_vertices);
-    glUniform4f(line_color_loc, 1.f, 1.f, 1.f, 0.8f);
-    glLineWidth(2.0f);
+    
+    glUniformMatrix4fv(line_matrix_loc, 1, GL_FALSE, glm::value_ptr(resize_matrix));
+    
+    float r = glm::clamp(power * 2.f, 0.f, 1.f);
+    float g = glm::clamp(2.f - power * 2.f, 0.f, 1.f);
+    glUniform4f(line_color_loc, r, g, 0.2f, 0.8f);
+    
+    glLineWidth(2.0f + power * 2.0f);
     glDrawArrays(GL_LINES, 0, 2);
 
     glBindVertexArray(0);
