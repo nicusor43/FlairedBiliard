@@ -48,8 +48,13 @@ void App::handleMouseInput(int button, int state, int x, int y)
 
         const auto angle = Util::rotationToPoint(target, white_ball->position);
 
-        white_ball->velocity.x = WHITE_BALL_HIT_SPEED * cosf(angle);
-        white_ball->velocity.y = WHITE_BALL_HIT_SPEED * sinf(angle);
+        // Minimum 20% power
+        float power = glm::max(0.2f, cue->getPower()); 
+        float shot_speed = WHITE_BALL_HIT_SPEED * power;
+ 
+
+        white_ball->velocity.x = shot_speed * cosf(angle);
+        white_ball->velocity.y = shot_speed * sinf(angle);
     }
 }
 
@@ -127,8 +132,8 @@ void App::ballsInteraction()
             constexpr float spin_factor = 0.5f;
             if (abs(rel_tangential) > 0.0001f)
             {
-                b1->angular_velocity -= spin_factor * rel_tangential / Ball::RADIUS;
-                b2->angular_velocity += spin_factor * rel_tangential / Ball::RADIUS;
+                b1->angular_velocity += spin_factor * rel_tangential / Ball::RADIUS;
+                b2->angular_velocity -= spin_factor * rel_tangential / Ball::RADIUS;
             }
 
             b1->velocity.x = v2 * cosf(theta2 - phi) * cosf(phi) + v1 * sinf(theta1 - phi) * cosf(phi + Util::PI / 2.f);
